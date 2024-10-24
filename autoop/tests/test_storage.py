@@ -1,6 +1,9 @@
 
 import unittest
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from autoop.core.storage import LocalStorage, NotFoundError
 import random
 import tempfile
@@ -47,4 +50,6 @@ class TestStorage(unittest.TestCase):
         keys = self.storage.list("test")
         keys = ["/".join(key.split("/")[-2:]) for key in keys]
         self.assertEqual(set(keys), set(random_keys))
-            
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

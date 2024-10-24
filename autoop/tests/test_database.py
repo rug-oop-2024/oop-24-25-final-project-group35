@@ -1,5 +1,8 @@
 import unittest
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from autoop.core.database import Database
 from autoop.core.storage import LocalStorage
 import random
@@ -50,3 +53,6 @@ class TestDatabase(unittest.TestCase):
         self.db.set("collection", key, value)
         # collection should now contain the key
         self.assertIn((key, value), self.db.list("collection"))
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

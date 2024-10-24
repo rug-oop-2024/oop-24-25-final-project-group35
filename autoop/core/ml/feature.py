@@ -1,12 +1,13 @@
-
-from pydantic import BaseModel, Field
 from typing import Literal
-import numpy as np
 
-from autoop.core.ml.dataset import Dataset
+class Feature:
 
-class Feature(BaseModel):
-    # attributes here
+    def __init__(self, name: str, type: Literal['numerical', 'categorical']):
+        self.name = name
+        self.type = type
 
     def __str__(self):
-        raise NotImplementedError("To be implemented.")
+        return f"Feature(name={self.name}, type={self.type})"
+
+    def __repr__(self):
+        return self.__str__()
