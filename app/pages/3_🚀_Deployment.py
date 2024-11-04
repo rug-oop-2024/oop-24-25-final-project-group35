@@ -9,7 +9,7 @@ from autoop.core.ml.artifact import Artifact
 st.set_page_config(page_title="Deployment", page_icon="🚀")
 
 st.title("🚀 Deployment")
-st.write("Here you can view and manage your saved pipelines.")
+st.write("Here you can view and manage your saved pipelines")
 
 automl = AutoMLSystem.get_instance()
 

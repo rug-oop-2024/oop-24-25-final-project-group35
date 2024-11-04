@@ -256,7 +256,7 @@ if datasets:
                     st.error("Please provide a pipeline name.")
 
     else:
-        st.warning("Please select at least one input feature.")
+        st.warning("Please select at least one input feature")
 
 else:
     st.warning("No datasets available. Please upload a dataset in the Datasets page.")

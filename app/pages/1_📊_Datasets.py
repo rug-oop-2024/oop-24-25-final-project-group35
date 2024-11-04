@@ -68,4 +68,4 @@ if datasets:
             st.success(f"Dataset {ds.name} deleted.")
             st.rerun()
 else:
-    st.write("No datasets available.")
+    st.write("No datasets available")
