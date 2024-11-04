@@ -9,7 +9,7 @@ METRICS = [
     "cohens_kappa",
     "mean_absolute_error",
     "r2",
-    "MCC"
+    "CSI"
 ]
 
 def get_metric(name: str):
@@ -24,8 +24,8 @@ def get_metric(name: str):
         return R2()
     elif name == "cohens_kappa":
         return CohensKappa()
-    elif name == "MCC":
-        return MCC()
+    elif name == "CSI":
+        return CSI()
     else:
         raise ValueError(f"Metric {name} is not supported. Available metrics: {METRICS}")
 
@@ -55,26 +55,44 @@ class CohensKappa(Metric):
         total = len(y_true)
         observed_agreement = np.sum(y_true == y_pred) / total
 
-        class_counts = np.bincount(y_true)
-        pred_counts = np.bincount(y_pred)
+        all_labels = np.unique(np.concatenate((y_true, y_pred)))
+        label_to_index = {label: idx for idx, label in enumerate(all_labels)}
+        y_true_int = np.array([label_to_index[label] for label in y_true])
+        y_pred_int = np.array([label_to_index[label] for label in y_pred])
+
+        class_counts = np.bincount(y_true_int, minlength=len(all_labels))
+        pred_counts = np.bincount(y_pred_int, minlength=len(all_labels))
+
         expected_agreement = np.sum((class_counts / total) * (pred_counts / total))
 
         kappa = (observed_agreement - expected_agreement) / (1 - expected_agreement)
         return kappa
 
-class MCC(Metric):
+class CSI(Metric):
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        TP = np.sum((y_true == 1) & (y_pred == 1))
-        TN = np.sum((y_true == 0) & (y_pred == 0))
-        FP = np.sum((y_true == 0) & (y_pred == 1))
-        FN = np.sum((y_true == 1) & (y_pred == 0))
+        all_labels = np.unique(np.concatenate((y_true, y_pred)))
+        label_to_index = {label: idx for idx, label in enumerate(all_labels)}
+        y_true_int = np.array([label_to_index[label] for label in y_true])
+        y_pred_int = np.array([label_to_index[label] for label in y_pred])
 
-        numerator = (TP * TN) - (FP * FN)
-        denominator = np.sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))
+        num_classes = len(all_labels)
+        csi_scores = []
 
-        if denominator == 0:
-            return 0.0
-        return numerator / denominator
+        for i in range(num_classes):
+            true_positive = np.sum((y_true_int == i) & (y_pred_int == i))
+            false_positive = np.sum((y_true_int != i) & (y_pred_int == i))
+            false_negative = np.sum((y_true_int == i) & (y_pred_int != i))
+
+            denominator = true_positive + false_positive + false_negative
+            if denominator == 0:
+                csi = 0.0
+            else:
+                csi = true_positive / denominator
+            csi_scores.append(csi)
+
+        mean_csi = np.mean(csi_scores)
+        return mean_csi
+
 
 
 class MeanAbsoluteError(Metric):
@@ -86,34 +104,19 @@ class MeanAbsoluteError(Metric):
 class R2(Metric):
 
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
-        total_variance = np.sum((y_true - np.mean(y_true)) ** 2)
-        explained_variance = np.sum((y_true - y_pred) ** 2)
-        if total_variance == 0:
-            return 0.0
-        r2 = 1 - (explained_variance / total_variance)
+        """
+        Calculate the R-squared (coefficient of determination) value.
+
+        Args:
+            y_true (np.ndarray): The true values of the target variable.
+            y_pred (np.ndarray): The predicted values from the model.
+
+        Returns:
+            float: The R-squared value.
+        """
+        y_mean = np.mean(y_true)
+        ss_tot = np.sum((y_true - y_mean) ** 2)
+        ss_res = np.sum((y_true - y_pred) ** 2)
+        r2 = 1 - (ss_res / ss_tot)
         return r2
 
-
-y_true_reg = np.array([3.0, -0.5, 2.0, 7.0])
-y_pred_reg = np.array([2.5, 0.0, 2.0, 8.0])
-
-mse_metric = get_metric("mean_squared_error")
-mae_metric = get_metric("mean_absolute_error")
-r2_metric = get_metric("r2")
-
-print(f"MSE: {mse_metric(y_true_reg, y_pred_reg)}")
-print(f"MAE: {mae_metric(y_true_reg, y_pred_reg)}")
-print(f"R2: {r2_metric(y_true_reg, y_pred_reg)}")
-
-
-y_true_class = np.array([1, 0, 1, 1])
-y_pred_class = np.array([1, 0, 0, 1])
-
-accuracy_metric = get_metric("accuracy")
-kappa_metric = get_metric("cohens_kappa")
-mcc_metric = get_metric("MCC")
-
-
-print(f"Accuracy: {accuracy_metric(y_true_class, y_pred_class)}")
-print(f"CohensKappa: {kappa_metric(y_true_class, y_pred_class)}")
-print(f"MCC: {mcc_metric(y_true_class, y_pred_class)}")

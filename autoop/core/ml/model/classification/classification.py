@@ -23,7 +23,7 @@ class KNearestNeighbors(Model):
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray):
         self.observations = observations
-        self.ground_truth = ground_truth
+        self.ground_truth = ground_truth.flatten()
 
     def predict(self, observations: np.ndarray):
         return [self._predict_single(x) for x in observations]
@@ -61,18 +61,3 @@ class DecisionTree(Model):
     def predict(self, X: np.ndarray):
         return self.model.predict(X)
 
-
-X_train = np.array([[1, 2], [3, 4], [1, 1], [5, 6]])
-y_train = np.array([0, 1, 0, 1])
-
-X_test = np.array([[2, 2], [4, 5]])
-
-knn_model = KNearestNeighbors(k=3, asset_path="some/path")
-knn_model.fit(X_train, y_train)
-knn_predictions = knn_model.predict(X_test)
-print(f"KNN Predictions: {knn_predictions}")
-
-decision_tree_model = DecisionTree(max_depth=3, asset_path="some/path")
-decision_tree_model.fit(X_train, y_train)
-decision_tree_predictions = decision_tree_model.predict(X_test)
-print(f"Decision Tree Predictions: {decision_tree_predictions}")

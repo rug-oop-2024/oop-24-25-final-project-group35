@@ -63,30 +63,3 @@ class SupportVectorRegression(Model):
         return self.model.predict(X)
 
 
-
-if __name__ == "__main__":
-
-    X_train_reg = np.array([[1], [2], [3], [4]])
-    y_train_reg = np.array([1.5, 3.0, 4.5, 6.0])
-
-    X_test_reg = np.array([[5], [6]])
-
-    mlr_model = MultipleLinearRegression(asset_path="some/path", version="1.0.0")
-    mlr_model.fit(X_train_reg, y_train_reg)
-    mlr_predictions = mlr_model.predict(X_test_reg)
-    print(f"MLR Predictions: {mlr_predictions}")
-
-    lasso_model = Lasso(asset_path="models/lasso_model", version="1.0.0")
-    lasso_model.fit(X_train_reg, y_train_reg)
-    lasso_predictions = lasso_model.predict(X_test_reg)
-    print(f"Lasso Predictions: {lasso_predictions}")
-
-    X_train_reg = np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6]])
-    y_train_reg = np.array([0, 1, 2, 1, 0])
-    X_test_reg = np.array([[3, 4], [1, 2]])
-
-    svr_model = SupportVectorRegression(asset_path="models/lasso_model", version="1.0.0")
-    svr_model.fit(X_train_reg, y_train_reg)
-    svr_predictions = svr_model.predict(X_test_reg)
-    print(f"SVR: {svr_predictions}")
-

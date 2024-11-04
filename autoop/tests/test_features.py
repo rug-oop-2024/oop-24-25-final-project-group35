@@ -36,7 +36,6 @@ class TestFeatures(unittest.TestCase):
         for feature in features:
             self.assertIsInstance(feature, Feature)
             self.assertEqual(feature.name in iris.feature_names, True)
-            print(feature.name)
             self.assertEqual(feature.type, "numerical")
         
     def test_detect_features_with_categories(self):

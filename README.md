@@ -58,7 +58,7 @@ You can try implementing the one of the following, we will give a max of 2 point
 * Show a graph of how the data flows through the pipeline.
 * Support feature types of image, text, video, audio.
 * Support target types of image, text, video, audio.
-* Support time-series data (with the aforementioned column types) where a user can choose the time column.
+* Support time-series data (with the aforementioned column (types) where a user can choose the time column.
 * Support what-if analysis (e.g., user can change the input and see the output).
 * Support metric optimization (e.g., select certain inputs to be adjusted to maximise the target column (e.g., maximise conversion).
 * Create a prediction code generator for a specific model.
@@ -154,29 +154,29 @@ If you did not implement the feature
 | Requirement                           | Type (FN/NF) | Implemented by       | Implementation Completed (add X if done) | Comment |
 |-------------------------------------- |--------------|----------------------|--------------------------|---------|         
 | Up-to-date requirements.txt           | NF           |                      |         | |
-| `ML/detect-features`                  | FN           | Arseni               |         | |
-| `ML/artifact`                         | NF           | Arseni               |         | |
-| `ML/feature`                          | NF           | Arseni               |         | |
-| `ML/metric`                           | NF           | Arseni               |         | |
-| `ML/metric/extensions`                | FN           | Arseni               |         | |
-| `ML/model`                            | NF           | Arseni               |         | |
-| `ML/model/extensions`                 | FN           | Arseni               |         | |
-| `ML/pipeline/evaluation`              | FN           | Arseni               |         | |
-| `ST/page/datasets`                    | NF           |                      |         | |
-| `ST/datasets/management/create`       | FN           |                      |         | |
-| `ST/datasets/management/save`         | FN           |                      |         | |
-| `ST/page/modelling`                   | NF           |                      |         | |
-| `ST/modelling/datasets/list`          | FN           |                      |         | |
-| `ST/modelling/datasets/features`      | FN           |                      |         | |
-| `ST/modelling/models`                 | FN           |                      |         | |
-| `ST/modelling/pipeline/split`         | FN           |                      |         | |
-| `ST/modelling/pipeline/metrics`       | FN           |                      |         | |
-| `ST/modelling/pipeline/summary`       | FN           |                      |         | |
-| `ST/modelling/pipeline/train`         | FN           |                      |         | |
-| `ST/modelling/pipeline/save`          | FN           |                      |         | |
-| `ST/page/deployment`                  | FN           |                      |         | |
-| `ST/deployment/load`                  | FN           |                      |         | |
-| `ST/deployment/predict`               | FN           |                      |         | |
+| `ML/detect-features`                  | FN           | Arseni               |  X       | |
+| `ML/artifact`                         | NF           | Arseni               |   X      | |
+| `ML/feature`                          | NF           | Arseni               |    X     | |
+| `ML/metric`                           | NF           | Arseni               |     X    | |
+| `ML/metric/extensions`                | FN           | Arseni               |      X   | |
+| `ML/model`                            | NF           | Arseni               |  X       | |
+| `ML/model/extensions`                 | FN           | Arseni               |   X      | |
+| `ML/pipeline/evaluation`              | FN           | Arseni               |    X     | |
+| `ST/page/datasets`                    | NF           | Arseni               |     X    | |
+| `ST/datasets/management/create`       | FN           | Arseni               |      X   | |
+| `ST/datasets/management/save`         | FN           | Arseni               |  X       | |
+| `ST/page/modelling`                   | NF           | Arseni               |   X      | |
+| `ST/modelling/datasets/list`          | FN           | Arseni               |    X     | |
+| `ST/modelling/datasets/features`      | FN           | Arseni               |     X    | |
+| `ST/modelling/models`                 | FN           | Arseni               |      X   | |
+| `ST/modelling/pipeline/split`         | FN           | Arseni               |  X       | |
+| `ST/modelling/pipeline/metrics`       | FN           | Arseni               |   X      | |
+| `ST/modelling/pipeline/summary`       | FN           | Arseni               |    X     | |
+| `ST/modelling/pipeline/train`         | FN           | Arseni               |     X    | |
+| `ST/modelling/pipeline/save`          | FN           | Arseni               |      X   | |
+| `ST/page/deployment`                  | FN           | Arseni               |  X       | |
+| `ST/deployment/load`                  | FN           | Arseni               |   X      | |
+| `ST/deployment/predict`               | FN           | Arseni               |    X     | |
 
 If you add extra features, please indicate them below:
 | Requirement                           | Type (FN/NF) | Implemented by       | Implementation Completed (add X if done) | Comment |

@@ -30,23 +30,5 @@ class Artifact:
     def __repr__(self):
         return f"Artifact(id={self.id}, name={self.name}, asset_path={self.asset_path}, version={self.version}, type={self.type}, tags={self.tags})"
 
-'''
-artifact = Artifact(
-    asset_path="users/mo-assaf/models/yolov8.pth",
-    version="1.0.2",
-    data=b"binary_state_data",
-    metadata={
-        "experiment_id": "exp-123fbdiashdb",
-        "run_id": "run-12378yufdh89afd"
-    }
-)
 
-print(artifact.id)
 
-# Access metadata
-print(artifact.get_metadata())
-
-# Save new data
-artifact.save(b"new_binary_data")
-print(artifact.read())
-'''

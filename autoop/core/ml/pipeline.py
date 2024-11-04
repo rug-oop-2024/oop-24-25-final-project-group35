@@ -27,7 +27,7 @@ class Pipeline():
         self._metrics = metrics
         self._artifacts = {}
         self._split = split
-        if target_feature.type == "categorical" and model.type != "classification":
+        if target_feature.type == "categoricals" and model.type != "classification":
             raise ValueError("Model type must be classification for categorical target feature")
         if target_feature.type == "continuous" and model.type != "regression":
             raise ValueError("Model type must be regression for continuous target feature")
@@ -74,15 +74,23 @@ Pipeline(
     def _register_artifact(self, name: str, artifact):
         self._artifacts[name] = artifact
 
+
     def _preprocess_features(self):
-        (target_feature_name, target_data, artifact) = preprocess_features([self._target_feature], self._dataset)[0]
-        self._register_artifact(target_feature_name, artifact)
+        df = self._dataset.read()
+
+        if self._target_feature.type == 'categorical':
+            target_data = df[self._target_feature.name].values
+            self._output_vector = target_data
+        else:
+            (target_feature_name, target_data, artifact) = preprocess_features([self._target_feature], self._dataset)[0]
+            self._register_artifact(target_feature_name, artifact)
+            self._output_vector = target_data.flatten()
+
         input_results = preprocess_features(self._input_features, self._dataset)
         for (feature_name, data, artifact) in input_results:
             self._register_artifact(feature_name, artifact)
-        # Get the input vectors and output vector, sort by feature name for consistency
-        self._output_vector = target_data
         self._input_vectors = [data for (feature_name, data, artifact) in input_results]
+
 
     def _split_data(self):
         # Split the data into training and testing sets
@@ -133,6 +141,7 @@ Pipeline(
             "predictions": self._predictions,
         }
         
+
 
 
     

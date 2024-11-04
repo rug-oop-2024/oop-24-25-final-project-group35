@@ -46,7 +46,7 @@ if uploaded_file is not None:
         dataset.tags = [tag.strip() for tag in tags.split(",") if tag.strip()]
         automl.registry.register(dataset)
         st.success(f"Dataset {name} saved successfully.")
-        st.experimental_rerun()
+        st.rerun()
 
 st.header("Existing Datasets")
 
@@ -66,6 +66,6 @@ if datasets:
         if st.button(f"Delete {ds.name}", key=f"delete_{ds.id}"):
             automl.registry.delete(ds.id)
             st.success(f"Dataset {ds.name} deleted.")
-            st.experimental_rerun()
+            st.rerun()
 else:
     st.write("No datasets available.")
