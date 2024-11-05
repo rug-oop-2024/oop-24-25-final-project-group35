@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import pickle
 
 from app.core.system import AutoMLSystem
 from autoop.core.ml.dataset import Dataset
@@ -25,7 +24,6 @@ from autoop.core.ml.metric import (
     CSI,
 )
 from autoop.core.ml.pipeline import Pipeline
-from autoop.core.ml.artifact import Artifact
 
 st.set_page_config(page_title="Modelling", page_icon="📈")
 
@@ -36,7 +34,8 @@ def write_helper_text(text: str):
 
 st.write("# ⚙ Modelling")
 write_helper_text(
-    "In this section, you can design a machine learning pipeline to train a model on a dataset."
+    "In this section, you can design a machine "
+    "learning pipeline to train a model on a dataset."
 )
 
 automl = AutoMLSystem.get_instance()
@@ -73,7 +72,8 @@ if datasets:
         st.write(df.head())
 
     features = detect_feature_types(selected_dataset)
-    feature_list = [{'name': feature.name, 'type': feature.type} for feature in features]
+    feature_list = [{'name': feature.name,
+                     'type': feature.type} for feature in features]
 
     st.subheader("Detected Features")
     feature_df = pd.DataFrame(feature_list)
@@ -81,7 +81,8 @@ if datasets:
 
     all_feature_names = [feature['name'] for feature in feature_list]
 
-    target_feature_name = st.selectbox("Select Target Feature", all_feature_names)
+    target_feature_name = st.selectbox(
+        "Select Target Feature", all_feature_names)
 
     available_input_features = [
         name for name in all_feature_names if name != target_feature_name
@@ -94,12 +95,14 @@ if datasets:
 
     if input_feature_names:
 
-        st.write(f"**Selected Input Features:** {', '.join(input_feature_names)}")
+        st.write(
+            f"**Selected Input Features:** {', '.join(input_feature_names)}")
 
         st.write(f"**Selected Target Feature:** {target_feature_name}")
 
         target_feature_type = next(
-            (feature['type'] for feature in feature_list if feature['name'] == target_feature_name),
+            (feature['type'] for feature in feature_list if feature[
+                'name'] == target_feature_name),
             None,
         )
 
@@ -113,7 +116,8 @@ if datasets:
         st.write(f"**Detected Task Type:** {task_type}")
 
         if task_type == 'Classification':
-            model_options = ['K-Nearest Neighbors', 'Logistic Regression', 'Decision Tree']
+            model_options = ['K-Nearest Neighbors',
+                             'Logistic Regression', 'Decision Tree']
             model_mapping = {
                 'K-Nearest Neighbors': KNearestNeighbors,
                 'Logistic Regression': ClassifierLogisticRegression,
@@ -195,8 +199,8 @@ if datasets:
                 )
                 for name in input_feature_names
             ]
-            target_feature = Feature(name=target_feature_name, type=target_feature_type)
-
+            target_feature = Feature(name=target_feature_name,
+                                     type=target_feature_type)
 
             pipeline = Pipeline(
                 metrics=metrics,
@@ -230,7 +234,6 @@ if datasets:
             for metric, value in results['test_metrics']:
                 st.write(f"- **{metric.__class__.__name__}:** {value}")
 
-
         if 'trained_pipeline' in st.session_state:
             st.subheader("Save Pipeline")
             pipeline_name = st.text_input("Pipeline Name")
@@ -245,12 +248,17 @@ if datasets:
                     for artifact in artifacts:
                         artifact.name = f"{pipeline_name}_{artifact.name}"
                         artifact.version = pipeline_version
-                        artifact.tags = [tag.strip() for tag in pipeline_tags.split(",") if tag.strip()]
+                        tags = pipeline_tags.split(",")
+                        artifact.tags = [
+                            tag.strip() for tag in tags if tag.strip()]
                         artifact.tags.append(f"pipeline:{pipeline_name}")
-                        artifact.asset_path = f"pipelines/{pipeline_name}/{artifact.name}_{pipeline_version}.pkl"
+                        artifact.asset_path = f"pipelines/{
+                            pipeline_name}/{artifact.name}_{
+                                pipeline_version}.pkl"
                         automl.registry.register(artifact)
 
-                    st.success(f"Pipeline '{pipeline_name}' saved successfully.")
+                    st.success(f"Pipeline '{
+                        pipeline_name}' saved successfully.")
 
                 else:
                     st.error("Please provide a pipeline name.")
@@ -259,5 +267,5 @@ if datasets:
         st.warning("Please select at least one input feature")
 
 else:
-    st.warning("No datasets available. Please upload a dataset in the Datasets page.")
-
+    st.warning(
+        "No datasets available. Please upload a dataset in the Datasets page.")

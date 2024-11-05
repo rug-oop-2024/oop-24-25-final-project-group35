@@ -1,2 +1,3 @@
-
-from autoop.core.ml.model.classification.classification import KNearestNeighbors, LogisticRegression, DecisionTree
+from autoop.core.ml.model.classification.classification import (
+    KNearestNeighbors, LogisticRegression, DecisionTree
+)

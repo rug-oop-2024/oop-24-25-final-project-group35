@@ -1,18 +1,23 @@
 import base64
 
+
 class Artifact:
-    def __init__(self, name: str = "default.csv", asset_path: str = "some/path", version: str = "1.0.0", data: bytes = None, metadata: dict = None, tags: list = None, **kwargs):
-        self.name = name  # Add a name attribute
+    def __init__(self, name: str = "default.csv",
+                 asset_path: str = "some/path", version: str = "1.0.0",
+                 data: bytes = None, metadata: dict = None,
+                 tags: list = None, **kwargs):
+        self.name = name
         self.asset_path = asset_path
         self.version = version
         self.data = data or b""
         self.metadata = metadata or {}
-        self.tags = tags or []  # Add a tags attribute
+        self.tags = tags or []
         self.type = kwargs.get('type', None)
 
     @property
     def id(self) -> str:
-        encoded_path = base64.urlsafe_b64encode(self.asset_path.encode()).decode()
+        encoded_path = base64.urlsafe_b64encode(
+            self.asset_path.encode()).decode()
         return f"{encoded_path}:{self.version}"
 
     def read(self) -> bytes:
@@ -28,7 +33,6 @@ class Artifact:
         self.metadata[key] = value
 
     def __repr__(self):
-        return f"Artifact(id={self.id}, name={self.name}, asset_path={self.asset_path}, version={self.version}, type={self.type}, tags={self.tags})"
-
-
-
+        return f"Artifact(id={self.id}, name={self.name}, "
+    "asset_path={self.asset_path}, version={self.version}, type={self.type}, "
+    "tags={self.tags})"

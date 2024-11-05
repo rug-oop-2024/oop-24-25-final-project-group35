@@ -3,14 +3,17 @@ import pandas as pd
 from autoop.core.ml.dataset import Dataset
 from autoop.core.ml.feature import Feature
 
+
 def detect_feature_types(dataset: Dataset) -> List[Feature]:
     """
-    Detects feature types as 'numerical' or 'categorical' for each column in the dataset.
+    Detects feature types as 'numerical' or 'categorical' for each column
+    in the dataset.
     Assumes no NaN values.
 
     The function considers a numerical column as categorical if:
-    - The number of unique values is less than or equal to a threshold (e.g., 10), or
-    - The ratio of unique values to total number of rows is below a certain percentage (e.g., 5%).
+    - The number of unique values is less than or equal to a threshold (like 3)
+    - The ratio of unique values to total number of rows is below a
+    certain percentage (like 5%).
 
     Args:
         dataset: Dataset
@@ -28,7 +31,7 @@ def detect_feature_types(dataset: Dataset) -> List[Feature]:
         unique_ratio = unique_values / n_rows
 
         if pd.api.types.is_numeric_dtype(df[column]):
-            if unique_values <= 3:
+            if unique_values <= 3 and unique_ratio < 0.05:
                 feature_type = 'categorical'
             else:
                 feature_type = 'numerical'
@@ -39,4 +42,3 @@ def detect_feature_types(dataset: Dataset) -> List[Feature]:
         features.append(feature)
 
     return features
-

@@ -4,11 +4,13 @@ import numpy as np
 from typing import Literal
 import pickle
 
+
 class Model(Artifact, ABC):
-    def __init__(self, name: str, model_type: Literal['classification', 'regression'], **kwargs):
+    def __init__(self, name: str, model_type: Literal['classification',
+                                                      'regression'], **kwargs):
         super().__init__(**kwargs)
-        self.name = name
-        self.model_type = model_type
+        self._name = name
+        self._model_type = model_type
         self.parameters = {}
 
     @abstractmethod
@@ -26,7 +28,7 @@ class Model(Artifact, ABC):
             name=name,
             data=data,
             type='model',
-            metadata={'model_type': self.model_type},
+            metadata={'model_type': self._model_type},
         )
 
     def save_model(self):
@@ -40,6 +42,5 @@ class Model(Artifact, ABC):
             raise ValueError("No model data found to load.")
 
     def __repr__(self):
-        return f"Model(name={self.name}, model_type={self.model_type}, parameters={self.parameters})"
-
-    
+        return f"Model(name={self._name}, model_type={self._model_type}, "
+    "parameters={self.parameters})"

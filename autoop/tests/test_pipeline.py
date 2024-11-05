@@ -4,8 +4,8 @@ import pandas as pd
 import sys
 import os
 
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+sys.path.append(os.path.abspath(os.path.join(
+    os.path.dirname(__file__), '../../')))
 
 from autoop.core.ml.pipeline import Pipeline
 from autoop.core.ml.dataset import Dataset
@@ -13,6 +13,7 @@ from autoop.core.ml.feature import Feature
 from autoop.functional.feature import detect_feature_types
 from autoop.core.ml.model.regression import MultipleLinearRegression
 from autoop.core.ml.metric import MeanSquaredError
+
 
 class TestPipeline(unittest.TestCase):
 
@@ -31,33 +32,36 @@ class TestPipeline(unittest.TestCase):
         self.pipeline = Pipeline(
             dataset=self.dataset,
             model=MultipleLinearRegression(),
-            input_features=list(filter(lambda x: x.name != "age", self.features)),
+            input_features=list(filter(lambda x: x.name != "age",
+                                       self.features)),
             target_feature=Feature(name="age", type="numerical"),
             metrics=[MeanSquaredError()],
             split=0.8
         )
         self.ds_size = data.data.shape[0]
 
-    def test_init(self):
+    def test_init(self) -> None:
         self.assertIsInstance(self.pipeline, Pipeline)
 
-    def test_preprocess_features(self):
+    def test_preprocess_features(self) -> None:
         self.pipeline._preprocess_features()
         self.assertEqual(len(self.pipeline._artifacts), len(self.features))
 
-    def test_split_data(self):
+    def test_split_data(self) -> None:
         self.pipeline._preprocess_features()
         self.pipeline._split_data()
-        self.assertEqual(self.pipeline._train_X[0].shape[0], int(0.8 * self.ds_size))
-        self.assertEqual(self.pipeline._test_X[0].shape[0], self.ds_size - int(0.8 * self.ds_size))
+        self.assertEqual(self.pipeline._train_X[0].shape[0],
+                         int(0.8 * self.ds_size))
+        self.assertEqual(self.pipeline._test_X[0].shape[0],
+                         self.ds_size - int(0.8 * self.ds_size))
 
-    def test_train(self):
+    def test_train(self) -> None:
         self.pipeline._preprocess_features()
         self.pipeline._split_data()
         self.pipeline._train()
         self.assertIsNotNone(self.pipeline._model.parameters)
 
-    def test_evaluate(self):
+    def test_evaluate(self) -> None:
         self.pipeline._preprocess_features()
         self.pipeline._split_data()
         self.pipeline._train()
@@ -65,6 +69,7 @@ class TestPipeline(unittest.TestCase):
         self.assertIsNotNone(self.pipeline._predictions)
         self.assertIsNotNone(self.pipeline._metrics_results)
         self.assertEqual(len(self.pipeline._metrics_results), 1)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -5,19 +5,20 @@ import pandas as pd
 import sys
 import os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-
+sys.path.append(os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../')))
 
 from autoop.core.ml.dataset import Dataset
 from autoop.core.ml.feature import Feature
 from autoop.functional.feature import detect_feature_types
+
 
 class TestFeatures(unittest.TestCase):
 
     def setUp(self) -> None:
         pass
 
-    def test_detect_features_continuous(self):
+    def test_detect_features_continuous(self) -> None:
         iris = load_iris()
         df = pd.DataFrame(
             iris.data,
@@ -37,8 +38,8 @@ class TestFeatures(unittest.TestCase):
             self.assertIsInstance(feature, Feature)
             self.assertEqual(feature.name in iris.feature_names, True)
             self.assertEqual(feature.type, "numerical")
-        
-    def test_detect_features_with_categories(self):
+
+    def test_detect_features_with_categories(self) -> None:
         data = fetch_openml(name="adult", version=1, parser="auto")
         df = pd.DataFrame(
             data.data,
@@ -72,10 +73,13 @@ class TestFeatures(unittest.TestCase):
         for feature in features:
             self.assertIsInstance(feature, Feature)
             self.assertEqual(feature.name in data.feature_names, True)
-        for detected_feature in filter(lambda x: x.name in numerical_columns, features):
+        for detected_feature in filter(lambda x: x.name in numerical_columns,
+                                       features):
             self.assertEqual(detected_feature.type, "numerical")
-        for detected_feature in filter(lambda x: x.name in categorical_columns, features):
+        for detected_feature in filter(lambda x: x.name in categorical_columns,
+                                       features):
             self.assertEqual(detected_feature.type, "categorical")
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

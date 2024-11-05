@@ -1,18 +1,18 @@
 import sys
 import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../../')))
-
 import numpy as np
+
+sys.path.append(os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../../../../../')))
+
 from collections import Counter
-from sklearn.linear_model import LogisticRegression as SklearnLogisticRegression
+from sklearn.linear_model import (
+    LogisticRegression as SklearnLogisticRegression)
 from sklearn.tree import DecisionTreeClassifier as SklearnDecisionTree
 from autoop.core.ml.model import Model
 
 
-
 class KNearestNeighbors(Model):
-
     def __init__(self, k=3, **kwargs):
         super().__init__(name="KNN", model_type="classification", **kwargs)
         if k <= 0:
@@ -37,27 +37,26 @@ class KNearestNeighbors(Model):
 
 
 class LogisticRegression(Model):
-    
     def __init__(self, **kwargs):
-        super().__init__(name="Logistic Regression", model_type="classification", **kwargs)
-        self.model = SklearnLogisticRegression()
+        super().__init__(name="Logistic Regression",
+                         model_type="classification", **kwargs)
+        self._model = SklearnLogisticRegression()
 
     def fit(self, X: np.ndarray, y: np.ndarray):
-        self.model.fit(X, y)
+        self._model.fit(X, y)
 
     def predict(self, X: np.ndarray):
-        return self.model.predict(X)
+        return self._model.predict(X)
 
 
 class DecisionTree(Model):
-    
     def __init__(self, max_depth=3, **kwargs):
-        super().__init__(name="Decision Tree", model_type="classification", **kwargs)
-        self.model = SklearnDecisionTree(max_depth=max_depth)
+        super().__init__(name="Decision Tree",
+                         model_type="classification", **kwargs)
+        self._model = SklearnDecisionTree(max_depth=max_depth)
 
     def fit(self, X: np.ndarray, y: np.ndarray):
-        self.model.fit(X, y)
+        self._model.fit(X, y)
 
     def predict(self, X: np.ndarray):
-        return self.model.predict(X)
-
+        return self._model.predict(X)

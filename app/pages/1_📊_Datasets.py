@@ -32,7 +32,8 @@ if uploaded_file is not None:
     st.write(data.head())
 
     name = st.text_input("Dataset Name", value=uploaded_file.name)
-    asset_path = st.text_input("Asset Path", value=f"objects/{uploaded_file.name}")
+    asset_path = st.text_input("Asset Path",
+                               value=f"objects/{uploaded_file.name}")
     version = st.text_input("Version", value="1.0.0")
     tags = st.text_input("Tags (comma-separated)", value="")
 

@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Any
 import numpy as np
 
 # List of supported metric names
@@ -11,6 +10,7 @@ METRICS = [
     "r2",
     "CSI"
 ]
+
 
 def get_metric(name: str):
     """Factory function to get a metric by name."""
@@ -27,7 +27,9 @@ def get_metric(name: str):
     elif name == "CSI":
         return CSI()
     else:
-        raise ValueError(f"Metric {name} is not supported. Available metrics: {METRICS}")
+        raise ValueError(f"Metric {name} is not supported. "
+                         "Available metrics: {METRICS}")
+
 
 class Metric(ABC):
 
@@ -41,6 +43,7 @@ class MeanSquaredError(Metric):
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         mse = np.mean((y_true - y_pred) ** 2)
         return mse
+
 
 class Accuracy(Metric):
 
@@ -63,10 +66,13 @@ class CohensKappa(Metric):
         class_counts = np.bincount(y_true_int, minlength=len(all_labels))
         pred_counts = np.bincount(y_pred_int, minlength=len(all_labels))
 
-        expected_agreement = np.sum((class_counts / total) * (pred_counts / total))
+        expected_agreement = np.sum((class_counts / total) * (
+            pred_counts / total))
 
-        kappa = (observed_agreement - expected_agreement) / (1 - expected_agreement)
+        kappa = (observed_agreement - expected_agreement) / (
+            1 - expected_agreement)
         return kappa
+
 
 class CSI(Metric):
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
@@ -82,7 +88,6 @@ class CSI(Metric):
             true_positive = np.sum((y_true_int == i) & (y_pred_int == i))
             false_positive = np.sum((y_true_int != i) & (y_pred_int == i))
             false_negative = np.sum((y_true_int == i) & (y_pred_int != i))
-
             denominator = true_positive + false_positive + false_negative
             if denominator == 0:
                 csi = 0.0
@@ -94,12 +99,12 @@ class CSI(Metric):
         return mean_csi
 
 
-
 class MeanAbsoluteError(Metric):
 
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         mae = np.mean(np.abs(y_true - y_pred))
         return mae
+
 
 class R2(Metric):
 
@@ -119,4 +124,3 @@ class R2(Metric):
         ss_res = np.sum((y_true - y_pred) ** 2)
         r2 = 1 - (ss_res / ss_tot)
         return r2
-
