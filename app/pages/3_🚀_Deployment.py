@@ -33,9 +33,10 @@ if pipeline_names:
     st.write(f"## Pipeline: {selected_pipeline_name}")
 
     model_artifact = next(
-        (artif for artif in pipeline_artifacts if artif.type == 'model'
-         ), None
-                        )
+        (artif for artif in pipeline_artifacts if artif.type == 'model'),
+        None
+    )
+
     if model_artifact:
         model_type = model_artifact.metadata.get('model_type', 'unknown')
         st.write(f"**Model Type:** {model_type.capitalize()}")
