@@ -48,7 +48,7 @@ class Pipeline:
         self._split = split
 
         if (
-            target_feature.type == "categoricals" and
+            target_feature.type == "categoricals" and  # noqa: W504
             model.type != "classification"
         ):
             raise ValueError(
