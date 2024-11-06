@@ -1,3 +1,6 @@
+"""
+This package provides the core implementation for the models.
+"""
 from autoop.core.ml.model.model import Model
 
 REGRESSION_MODELS = [

@@ -126,7 +126,7 @@ class AutoMLSystem:
         """
         if AutoMLSystem._instance is None:
             AutoMLSystem._instance = AutoMLSystem(
-                LocalStorage("./assets/objects"), 
+                LocalStorage("./assets/objects"),
                 Database(
                     LocalStorage("./assets/dbo")
                 )
