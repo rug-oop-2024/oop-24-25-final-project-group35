@@ -3,7 +3,7 @@ import unittest
 import pandas as pd
 import sys
 import os
-
+# flake8: noqa: E402
 sys.path.append(os.path.abspath(os.path.join(
     os.path.dirname(__file__), '../../')))
 

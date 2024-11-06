@@ -12,8 +12,18 @@ METRICS = [
 ]
 
 
-def get_metric(name: str):
-    """Factory function to get a metric by name."""
+def get_metric(name: str) -> "Metric":
+    """Factory function to retrieve a metric instance by name.
+
+    Args:
+        name (str): The name of the metric to retrieve.
+
+    Returns:
+        Metric: An instance of the requested metric.
+
+    Raises:
+        ValueError: If the metric name is not supported.
+    """
     if name == "mean_squared_error":
         return MeanSquaredError()
     elif name == "accuracy":
@@ -28,33 +38,80 @@ def get_metric(name: str):
         return CSI()
     else:
         raise ValueError(f"Metric {name} is not supported. "
-                         "Available metrics: {METRICS}")
+                         f"Available metrics: {METRICS}")
 
 
 class Metric(ABC):
+    """Abstract base class for evaluation metrics."""
 
     @abstractmethod
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """Calculate the metric based on true and predicted values.
+
+        Args:
+            y_true (np.ndarray): The true target values.
+            y_pred (np.ndarray): The predicted values.
+
+        Returns:
+            float: The computed metric value.
+        """
         pass
 
 
 class MeanSquaredError(Metric):
+    """Computes the Mean Squared Error (MSE) between true and predicted values.
+    """
 
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """
+        Calculate the MSE.
+
+        Args:
+            y_true (np.ndarray): The true values of the target variable.
+            y_pred (np.ndarray): The predicted values from the model.
+
+        Returns:
+            float: The MSE value.
+        """
         mse = np.mean((y_true - y_pred) ** 2)
         return mse
 
 
 class Accuracy(Metric):
+    """Calculates the accuracy of predictions, representing the proportion
+    of correct predictions."""
 
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """
+        Calculate the Accuracy.
+
+        Args:
+            y_true (np.ndarray): The true values of the target variable.
+            y_pred (np.ndarray): The predicted values from the model.
+
+        Returns:
+            float: The Accuracy value.
+        """
         correct_predictions = np.sum(y_true == y_pred)
         accuracy = correct_predictions / len(y_true)
         return accuracy
 
 
 class CohensKappa(Metric):
+    """Calculates Cohen's Kappa score, a statistic for inter-rater reliability.
+    """
+
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """
+        Calculate the Cohen's Kappa.
+
+        Args:
+            y_true (np.ndarray): The true values of the target variable.
+            y_pred (np.ndarray): The predicted values from the model.
+
+        Returns:
+            float: The Cohen's Kappa value.
+        """
         total = len(y_true)
         observed_agreement = np.sum(y_true == y_pred) / total
 
@@ -75,7 +132,20 @@ class CohensKappa(Metric):
 
 
 class CSI(Metric):
+    """Calculates the Critical Success Index (CSI), also known as the Threat
+    Score."""
+
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """
+        Calculate the CSI.
+
+        Args:
+            y_true (np.ndarray): The true values of the target variable.
+            y_pred (np.ndarray): The predicted values from the model.
+
+        Returns:
+            float: The CSI value.
+        """
         all_labels = np.unique(np.concatenate((y_true, y_pred)))
         label_to_index = {label: idx for idx, label in enumerate(all_labels)}
         y_true_int = np.array([label_to_index[label] for label in y_true])
@@ -100,17 +170,31 @@ class CSI(Metric):
 
 
 class MeanAbsoluteError(Metric):
+    """Computes the Mean Absolute Error (MAE) between true and predicted
+    values."""
 
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
+        """
+        Calculate the MAE.
+
+        Args:
+            y_true (np.ndarray): The true values of the target variable.
+            y_pred (np.ndarray): The predicted values from the model.
+
+        Returns:
+            float: The mean MAE value.
+        """
         mae = np.mean(np.abs(y_true - y_pred))
         return mae
 
 
 class R2(Metric):
+    """Computes the R-squared (coefficient of determination) score, indicating
+    the proportion of variance explained by the model."""
 
     def __call__(self, y_true: np.ndarray, y_pred: np.ndarray) -> float:
         """
-        Calculate the R-squared (coefficient of determination) value.
+        Calculate the R-squared.
 
         Args:
             y_true (np.ndarray): The true values of the target variable.

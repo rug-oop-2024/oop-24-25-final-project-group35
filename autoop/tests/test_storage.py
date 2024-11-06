@@ -2,7 +2,7 @@
 import unittest
 import sys
 import os
-
+# flake8: noqa: E402
 sys.path.append(os.path.abspath(os.path.join(
     os.path.dirname(__file__), '../../')))
 from autoop.core.storage import LocalStorage, NotFoundError

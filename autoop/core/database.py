@@ -3,20 +3,39 @@ from typing import Tuple, List, Union
 from autoop.core.storage import Storage
 
 
-class Database():
-    def __init__(self, storage: Storage):
+class Database:
+    """A database class that stores and manages data in collections
+    and persists data to external storage.
+
+    The Database class allows for setting, retrieving, deleting,
+    and listing entries within collections, with data persisted
+    to a specified storage backend.
+    """
+
+    def __init__(self, storage: Storage) -> None:
+        """Initializes the Database with a specified storage backend.
+
+        Args:
+            storage (Storage): The storage backend to use for persistence.
+        """
         self._storage = storage
         self._data = {}
         self._load()
 
     def set(self, collection: str, id: str, entry: dict) -> dict:
-        """Set a key in the database
+        """Store or update an entry in a specified collection.
+
         Args:
-            collection (str): The collection to store the data in
-            id (str): The id of the data
-            entry (dict): The data to store
+            collection (str): The name of the collection to store data in.
+            id (str): The unique identifier for the data entry.
+            entry (dict): The data entry to store.
+
         Returns:
-            dict: The data that was stored
+            dict: The data entry that was stored.
+
+        Raises:
+            AssertionError: If entry is not a dictionary, collection
+                            is not a string, or id is not a string.
         """
         assert isinstance(entry, dict), "Data must be a dictionary"
         assert isinstance(collection, str), "Collection must be a string"
@@ -28,23 +47,27 @@ class Database():
         return entry
 
     def get(self, collection: str, id: str) -> Union[dict, None]:
-        """Get a key from the database
+        """Retrieve an entry from a specified collection.
+
         Args:
-            collection (str): The collection to get the data from
-            id (str): The id of the data
+            collection (str): The name of the collection to retrieve data from.
+            id (str): The unique identifier for the data entry.
+
         Returns:
-            Union[dict, None]: The data that was stored,
-            or None if it doesn't exist
+            Union[dict, None]: The data entry if found, or None if
+            it doesn't exist.
         """
         if not self._data.get(collection, None):
             return None
         return self._data[collection].get(id, None)
 
-    def delete(self, collection: str, id: str):
-        """Delete a key from the database
+    def delete(self, collection: str, id: str) -> None:
+        """Delete an entry from a specified collection.
+
         Args:
-            collection (str): The collection to delete the data from
-            id (str): The id of the data
+            collection (str): The name of the collection to delete data from.
+            id (str): The unique identifier for the data entry.
+
         Returns:
             None
         """
@@ -55,39 +78,55 @@ class Database():
         self._persist()
 
     def list(self, collection: str) -> List[Tuple[str, dict]]:
-        """Lists all data in a collection
+        """List all entries in a specified collection.
+
         Args:
-            collection (str): The collection to list the data from
+            collection (str): The name of the collection to list entries from.
+
         Returns:
-            List[Tuple[str, dict]]: A list of tuples containing
-            the id and data for each item in the collection
+            List[Tuple[str, dict]]: A list of tuples containing the id
+            and data for each entry in the collection, or an empty list if the
+            collection doesn't exist.
         """
         if not self._data.get(collection, None):
             return []
         return [(id, data) for id, data in self._data[collection].items()]
 
-    def refresh(self):
-        """Refresh the database by loading the data from storage"""
+    def refresh(self) -> None:
+        """Reload the database from the storage backend.
+
+        This clears and reinitializes the database state based
+        on the current data in storage.
+        """
         self._load()
 
-    def _persist(self):
-        """Persist the data to storage"""
+    def _persist(self) -> None:
+        """Persist the current database state to the storage backend.
+
+        This method saves each entry in the database to storage and removes
+        entries from storage that are no longer in the idatabase.
+        """
         for collection, data in self._data.items():
             if not data:
                 continue
             for id, item in data.items():
                 self._storage.save(
-                    json.dumps(item).encode(), f"{collection}/{id}")
+                    json.dumps(item).encode(), f"{collection}/{id}"
+                )
 
-        # for things that were deleted, we need to remove them from the storage
+        # Remove entries from storage that were deleted from the database
         keys = self._storage.list("")
         for key in keys:
             collection, id = key.split("/")[-2:]
             if not self._data.get(collection, id):
                 self._storage.delete(f"{collection}/{id}")
 
-    def _load(self):
-        """Load the data from storage"""
+    def _load(self) -> None:
+        """Load the database state from the storage backend.
+
+        This method initializes the database with entries
+        stored in the storage.
+        """
         self._data = {}
         for key in self._storage.list(""):
             collection, id = key.split("/")[-2:]

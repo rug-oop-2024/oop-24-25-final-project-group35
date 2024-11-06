@@ -8,7 +8,6 @@ def detect_feature_types(dataset: Dataset) -> List[Feature]:
     """
     Detects feature types as 'numerical' or 'categorical' for each column
     in the dataset.
-    Assumes no NaN values.
 
     The function considers a numerical column as categorical if:
     - The number of unique values is less than or equal to a threshold (like 3)
