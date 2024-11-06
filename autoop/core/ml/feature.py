@@ -12,8 +12,9 @@ class Feature:
     """
 
     def __init__(
-            self, name: str, type: Literal['numerical', 'categorical']
-                ) -> None:
+        self, name: str, type: Literal['numerical', 'categorical']
+    ) -> None:
+
         """Initializes a Feature instance with a name and type.
 
         Args:
