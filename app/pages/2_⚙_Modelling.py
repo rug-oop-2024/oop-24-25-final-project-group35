@@ -252,13 +252,14 @@ if datasets:
                         artifact.tags = [
                             tag.strip() for tag in tags if tag.strip()]
                         artifact.tags.append(f"pipeline:{pipeline_name}")
-                        artifact.asset_path = f"pipelines/{
-                            pipeline_name}/{artifact.name}_{
-                                pipeline_version}.pkl"
+                        artifact.asset_path = (
+                            f"pipelines/{pipeline_name}/{artifact.name}"
+                            f"_{pipeline_version}.pkl"
+                        )
                         automl.registry.register(artifact)
 
-                    st.success(f"Pipeline '{
-                        pipeline_name}' saved successfully.")
+                    st.success(
+                        f"Pipeline '{pipeline_name}' saved successfully.")
 
                 else:
                     st.error("Please provide a pipeline name.")

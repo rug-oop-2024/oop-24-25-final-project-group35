@@ -26,8 +26,8 @@ if pipeline_names:
     selected_pipeline_name = st.selectbox("Select a Pipeline", pipeline_names)
 
     pipeline_artifacts = [
-        artifact for artifact in all_artifacts if f'pipeline:{
-            selected_pipeline_name}' in artifact.tags
+        artifact for artifact in all_artifacts
+        if f'pipeline:{selected_pipeline_name}' in artifact.tags
     ]
 
     st.write(f"## Pipeline: {selected_pipeline_name}")

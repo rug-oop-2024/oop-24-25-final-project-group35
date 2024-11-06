@@ -72,7 +72,7 @@ class Artifact:
         """
         return self.metadata
 
-    def set_metadata(self, key: str, value) -> None:
+    def set_metadata(self, key: str, value: str) -> None:
         """Sets a metadata key-value pair for the artifact.
 
         Args:

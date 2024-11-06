@@ -24,7 +24,7 @@ class Pipeline:
                  model: Model,
                  input_features: List[Feature],
                  target_feature: Feature,
-                 split=0.8) -> None:
+                 split: float = 0.8) -> None:
         """Initialize the Pipeline with a dataset, model, features and metrics.
 
         Args:
@@ -47,8 +47,8 @@ class Pipeline:
         self._artifacts = {}
         self._split = split
 
-        if (target_feature.type == "categoricals" and
-                model.type != "classification"):
+        if (target_feature.type == "categoricals"
+                and model.type != "classification"):
 
             raise ValueError(
                 "Model must be classification for categorical target feature"
@@ -115,7 +115,7 @@ Pipeline(
             name=f"pipeline_model_{self._model.type}"))
         return artifacts
 
-    def _register_artifact(self, name: str, artifact) -> None:
+    def _register_artifact(self, name: str, artifact: Artifact) -> None:
         """Registers an artifact with a specified name.
 
         Args:
