@@ -1,5 +1,5 @@
 ## I
-**Add datasets in the Datasets page on the 1st page. 3 Datasets from Kaggle have already been added to the repo during pushing. Here is an example of the usage of the Mobile Device Usage and User Behavior Dataset.**
+**Add datasets in the Datasets page on the 1st page. 3 Datasets from Kaggle have already been added to the repo during pushing. Here is an example of the usage of the Mobile Device Usage and User Behavior Dataset from the example_csv folder.**
 ![Add Screenshot](images/add1.png)
 
 ## II
