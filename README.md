@@ -153,7 +153,7 @@ If you did not implement the feature
 
 | Requirement                           | Type (FN/NF) | Implemented by       | Implementation Completed (add X if done) | Comment |
 |-------------------------------------- |--------------|----------------------|--------------------------|---------|         
-| Up-to-date requirements.txt           | NF           |                      |         | |
+| Up-to-date requirements.txt           | NF           |Arseni                |     X    | |
 | `ML/detect-features`                  | FN           | Arseni               |  X       | |
 | `ML/artifact`                         | NF           | Arseni               |   X      | |
 | `ML/feature`                          | NF           | Arseni               |    X     | |

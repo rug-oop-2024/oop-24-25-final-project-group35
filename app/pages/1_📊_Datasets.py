@@ -6,6 +6,10 @@ from autoop.core.ml.dataset import Dataset
 
 automl = AutoMLSystem.get_instance()
 
+"""
+Retrieves existing datasets from the artifact registry.
+"""
+
 artifacts = automl.registry.list(type="dataset")
 
 datasets = [
@@ -23,6 +27,11 @@ datasets = [
 st.title("Dataset Management")
 
 st.header("Upload a New Dataset")
+
+"""
+This is the main function to run the Streamlit app for dataset management.
+Allows users to upload, preview, save, and delete datasets.
+"""
 
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
@@ -50,6 +59,10 @@ if uploaded_file is not None:
         st.rerun()
 
 st.header("Existing Datasets")
+
+"""
+Handles the dataset upload section of the app.
+"""
 
 if datasets:
     for ds in datasets:

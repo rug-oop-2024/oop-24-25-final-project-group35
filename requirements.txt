@@ -1,5 +1,9 @@
-streamlit
-pydantic
-pandas
-numpy
-scikit-learn
+flake8==7.0.0
+numpy==1.26.4
+pandas==2.2.2
+pickleshare==0.7.5
+pip==24.0
+pydantic==2.5.3
+pydantic_core==2.14.6
+scikit-learn==1.4.2
+streamlit==1.32.0

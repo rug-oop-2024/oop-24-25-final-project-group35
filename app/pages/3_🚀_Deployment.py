@@ -11,7 +11,16 @@ st.write("Here you can view and manage your saved pipelines")
 
 automl = AutoMLSystem.get_instance()
 
+"""
+This app allows users to view saved pipelines, delete them, and use them for
+making predictions on new data.
+"""
+
 all_artifacts = automl.registry.list()
+
+"""
+Retrieves pipeline names from the list of all artifacts.
+"""
 
 pipeline_names = set()
 for artifact in all_artifacts:
@@ -30,6 +39,10 @@ if pipeline_names:
         if f'pipeline:{selected_pipeline_name}' in artifact.tags
     ]
 
+    """
+    Displays information about the selected pipeline.
+    """
+
     st.write(f"## Pipeline: {selected_pipeline_name}")
 
     model_artifact = next(
@@ -38,8 +51,13 @@ if pipeline_names:
     )
 
     if model_artifact:
-        model_type = model_artifact.metadata.get('model_type', 'unknown')
+        model_type = model_artifact.metadata.get("model_type", "unknown")
+        model_version = model_artifact.version
+        model_tags = ", ".join(model_artifact.tags) or "No tags"
+
         st.write(f"**Model Type:** {model_type.capitalize()}")
+        st.write(f"**Version:** {model_version}")
+        st.write(f"**Tags:** {model_tags}")
     else:
         st.error("Model artifact not found for this pipeline.")
         st.stop()
@@ -61,6 +79,9 @@ if pipeline_names:
             if st.button("Cancel"):
                 del st.session_state['delete_confirmation']
     else:
+        """
+        Allows the user to use the selected pipeline for making predictions.
+        """
         st.subheader("Use Pipeline for Prediction")
 
         if model_type == 'classification':
@@ -100,6 +121,11 @@ if pipeline_names:
                     for artifact in pipeline_artifacts
                     if artifact.type == 'preprocessing'
                 }
+
+                """
+                Preprocesses input features using the saved preprocessing
+                artifacts.
+                """
 
                 preprocessed_inputs = []
                 for feature in input_features:

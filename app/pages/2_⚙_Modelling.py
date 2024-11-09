@@ -49,6 +49,10 @@ write_helper_text(
 
 automl = AutoMLSystem.get_instance()
 
+"""
+Retrieves the list of datasets from the AutoML system.
+"""
+
 artifacts = automl.registry.list(type="dataset")
 
 datasets = [
@@ -63,13 +67,27 @@ datasets = [
     for artifact in artifacts
 ]
 
+"""
+This page allows users to select a dataset, choose input and target features,
+detect the task type (classification or regression), select a model,
+specify evaluation metrics, train the model, and save the trained pipeline.
+"""
+
 if datasets:
+    """
+    Allows the user to select a dataset from the available datasets.
+    """
+
     dataset_names = [ds.name for ds in datasets]
     dataset_dict = {ds.name: ds for ds in datasets}
 
     selected_dataset_name = st.selectbox("Select a Dataset", dataset_names)
 
     selected_dataset = dataset_dict[selected_dataset_name]
+
+    """
+    Displays information about the selected dataset
+    """
 
     df = selected_dataset.read()
 
@@ -80,6 +98,10 @@ if datasets:
     if st.checkbox("Preview Dataset"):
         st.write(df.head())
 
+    """
+    Detects features in the dataset and displays them.
+    """
+
     features = detect_feature_types(selected_dataset)
     feature_list = [{'name': feature.name,
                      'type': feature.type} for feature in features]
@@ -87,6 +109,10 @@ if datasets:
     st.subheader("Detected Features")
     feature_df = pd.DataFrame(feature_list)
     st.dataframe(feature_df)
+
+    """
+    Allows the user to select the target feature and input features.
+    """
 
     all_feature_names = [feature['name'] for feature in feature_list]
 
@@ -104,6 +130,10 @@ if datasets:
 
     if input_feature_names:
 
+        """
+        Displays the selected features and detects the task type.
+        """
+
         st.write(
             f"**Selected Input Features:** {', '.join(input_feature_names)}")
 
@@ -114,6 +144,10 @@ if datasets:
                 'name'] == target_feature_name),
             None,
         )
+
+        """
+        Allows the user to select a model based on the detected task type.
+        """
 
         if target_feature_type == 'categorical':
             task_type = 'Classification'
@@ -152,6 +186,11 @@ if datasets:
         ModelClass = model_mapping[selected_model_name]
         model = ModelClass()
 
+        """
+        Allows the user to select the training data split ratio
+        and evaluation metrics based on the task type.
+        """
+
         split_ratio = st.slider(
             'Select the training data ratio',
             min_value=0.1,
@@ -183,6 +222,10 @@ if datasets:
 
         metrics = [metric_options[name]() for name in selected_metric_names]
 
+        """
+        Displays a summary of the pipeline configuration.
+        """
+
         st.subheader("Pipeline Summary:")
 
         st.markdown(f"""
@@ -196,6 +239,10 @@ if datasets:
         - **Training Data Ratio:** {split_ratio}
         - **Selected Metrics:** {', '.join(selected_metric_names)}
         """)
+
+        """
+        Trains the model using the specified pipeline configuration.
+        """
 
         if st.button("Train Model"):
             input_features = [
@@ -242,6 +289,10 @@ if datasets:
             st.write("#### Testing Metrics")
             for metric, value in results['test_metrics']:
                 st.write(f"- **{metric.__class__.__name__}:** {value}")
+
+        """
+        Allows the user to save the trained pipeline.
+        """
 
         if 'trained_pipeline' in st.session_state:
             st.subheader("Save Pipeline")
